@@ -7,8 +7,9 @@ package MusicPlayerTest;
 
 import MusicPlayer.Tracks;
 import junit.framework.TestCase;
-import org.junit.Assert;
-import org.junit.Test;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import static org.junit.Assert.*;
+import org.junit.*;
 
 /**
  *
@@ -30,10 +31,22 @@ public class MainTest extends TestCase {
         super.tearDown();
     }
 
+    Tracks a = new Tracks("A", "B", "C", "D", "2000");
+    Tracks b = new Tracks("", "", "", "", "");
+
     @Test
-    public void testPlaylist() {
-        assertNotNull(Tracks.class);
+    public void testPlaylistNotEmpty() {
+        assertNotNull(a.getPlaylist());
+        assertNotEquals("", a.getPlaylist());
     }
-    
-    
+
+    @Test
+    public void testTrackNotNull() {
+        assertNotNull(a.getTrack());
+    }
+
+    @Test
+    public void testDuplicate() {
+        assertFalse(EqualsBuilder.reflectionEquals(a, b));
+    }
 }
