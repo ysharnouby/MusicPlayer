@@ -35,9 +35,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <h1>Create and delete playlists and tracks</h1>
@@ -50,18 +50,20 @@ import java.util.stream.Collectors;
  */
 public class Main {
 
-    private static final java.util.logging.Logger Log = Logger.getLogger(Main.class.getName());
+    private static final Logger Log = LoggerFactory.getLogger(Main.class.getName());
 
     /**
      * The creatTable method connects to the database and creates a table in the
      * database to store tracks and playlist details. It then takes the user's
-     * {@code choice} from the {@link Menu menu}, and makes an action accordingly.
+     * {@code choice} from the {@link Menu menu}, and makes an action
+     * accordingly.
      * <p>
-     * For every integer from 1 to 7 that can be chosen by the user from the {@link Menu menu},
-     * there is a method that describes the action to be taken. It can add or delete a playlist,
-     * add or delete a track, show the contents of a certain playlist, show or all the 
-     * tracks in the database, or exit the program.
-     * 
+     * For every integer from 1 to 7 that can be chosen by the user from the
+     * {@link Menu menu}, there is a method that describes the action to be
+     * taken. It can add or delete a playlist, add or delete a track, show the
+     * contents of a certain playlist, show or all the tracks in the database,
+     * or exit the program.
+     *
      * @param choice accepts selection from menu as parameter to do an action
      */
     public static void createTable(int choice) {
@@ -73,12 +75,12 @@ public class Main {
         try {
             DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
         } catch (SQLException ex) {
-            Log.log(Level.SEVERE, "Driver Manager failed to register", ex);
+            Log.trace("Driver Manager failed to register", ex);
         }
 
         try (Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@db.inf.unideb.hu:1521:ora11g", "ENG_T0B4CE", "kassai");
                 Statement st = conn.createStatement();) {
-            Log.log(Level.FINE, "Database connection established");
+            Log.debug("Database connection established");
             try {
                 st.executeUpdate("CREATE TABLE PLAYLISTS (playlist VARCHAR2(12)"
                         + " ,track VARCHAR2(12)"
@@ -87,7 +89,7 @@ public class Main {
                         + " ,year VARCHAR2(12))");
             } catch (SQLException ex) {
                 if (ex.getErrorCode() == 955) {
-                    Log.log(Level.INFO, "Table already exists; no need to create a new one");
+                    Log.info("Table already exists; no need to create a new one");
                 } else {
                     throw ex;
                 }
@@ -99,12 +101,12 @@ public class Main {
                     PreparedStatement pst = conn.prepareStatement("INSERT INTO PLAYLISTS (playlist, track, artist, publisher, year) "
                             + "VALUES (?,?,?,?,?)");
                     input = sc.nextLine();
-                    Log.log(Level.INFO, "Playlist created");
+                    Log.info("Playlist created");
                     try {
                         pst.setString(1, input);
                         pst.executeUpdate();
                     } catch (SQLException ex) {
-                        Log.log(Level.FINE, "Could create playlist", ex);
+                        Log.debug("Could create playlist", ex);
                     }
                     break;
 
@@ -149,9 +151,9 @@ public class Main {
                         pst2.setString(5, input);
 
                         pst2.executeUpdate();
-                        Log.log(Level.INFO, "Track created");
+                        Log.info("Track created");
                     } catch (SQLException ex) {
-                        Log.log(Level.SEVERE, "Failed to create track", ex);
+                        Log.debug("Failed to create track", ex);
                     }
                     break;
 
@@ -162,9 +164,9 @@ public class Main {
                     try {
                         pst4.setString(1, input);
                         pst4.executeUpdate();
-                        Log.log(Level.INFO, "Playlist deleted");
+                        Log.info("Playlist deleted");
                     } catch (SQLException ex) {
-                        Log.log(Level.WARNING, "Playlist could not be deleted. Playlist does not exist", ex);
+                        Log.warn("Playlist could not be deleted. Playlist does not exist", ex);
                     }
                     break;
 
@@ -176,9 +178,9 @@ public class Main {
                     try {
                         pst3.setString(1, input);
                         pst3.executeUpdate();
-                        Log.log(Level.INFO, "Track deleted");
+                        Log.info("Track deleted");
                     } catch (SQLException ex) {
-                        Log.log(Level.WARNING, "Track could not be deleted. Track does not exist", ex);
+                        Log.warn("Track could not be deleted. Track does not exist", ex);
                     }
                     break;
 
@@ -204,7 +206,7 @@ public class Main {
                             }
                         }
                     } catch (SQLException ex) {
-                        Log.log(Level.WARNING, "Playlist does not exist", ex);
+                        Log.warn("Playlist does not exist", ex);
                     }
                     break;
 
@@ -230,29 +232,37 @@ public class Main {
 
             }
         } catch (SQLException ex) {
-            Log.log(Level.SEVERE, "Failed to create table", ex);
+            Log.debug("Failed to create table", ex);
         }
     }
 
     /**
-     * This method takes the user's {@code choice} from the 
-     * {@link Menu menu} and give it as a parameter to {@link #createTable(int) createTable}
+     * This method takes the user's {@code choice} from the {@link Menu menu}
+     * and give it as a parameter to {@link #createTable(int) createTable}
      * method in order to do the action chosen by the user.
-     * 
+     *
      * @param args
      */
     public static void main(String[] args) {
 
-        int userchoice = Menu.menu();
-        if (userchoice != 0) {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter number 1 to start!");
+        int userchoice = input.nextInt();     
+        
+        
+            while (userchoice>0 && userchoice<7) {
+            Menu.menu();
+            userchoice = input.nextInt();
             createTable(userchoice);
+            }
+
         }
-    }
+
 
     /**
      * This method creates an ArrayList out of tracks and sorts them according
      * to alphabetical order of the playlist name.
-     * 
+     *
      * @param pList list of tracks to be sorted
      * @return sorted list of tracks
      */

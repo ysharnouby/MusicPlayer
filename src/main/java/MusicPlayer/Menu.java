@@ -47,8 +47,6 @@ public class Menu {
      */
     public static int menu() {
 
-        int selection;
-        Scanner input = new Scanner(System.in);
 
         System.out.println("Choose from these choices");
         System.out.println("-------------------------\n");
@@ -60,15 +58,7 @@ public class Menu {
         System.out.println("6 - Print all playlists");
         System.out.println("7 - Quit");
 
-        selection = input.nextInt();
 
-        if (selection > 0 && selection < 7) {
-            return selection;
-        } else if (selection == 7) {
-            return 0;
-        } else {
-            menu();
-        }
-        return 0;
+        return 1;
     }
 }
