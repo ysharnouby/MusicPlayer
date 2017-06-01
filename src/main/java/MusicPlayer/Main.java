@@ -229,6 +229,9 @@ public class Main {
                         }
                     }
                     break;
+                    
+                case 7:
+                    break;
 
             }
         } catch (SQLException ex) {
@@ -267,8 +270,8 @@ public class Main {
                 }
             }
 
-            if (userchoice < 1 && userchoice > 7) {
-                
+            if (userchoice > 1 && userchoice < 8) {
+
             } else {
                 while (true) {
                     System.out.println("Invalid input! Enter a number from 1 to 7!");
