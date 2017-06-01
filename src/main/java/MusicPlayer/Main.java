@@ -270,7 +270,7 @@ public class Main {
                 }
             }
 
-            if (userchoice > 1 && userchoice < 8) {
+            if (userchoice > 0 && userchoice < 8) {
 
             } else {
                 while (true) {
