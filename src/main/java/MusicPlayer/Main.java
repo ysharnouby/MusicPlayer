@@ -247,17 +247,40 @@ public class Main {
 
         Scanner input = new Scanner(System.in);
         System.out.println("Enter number 1 to start!");
-        int userchoice = input.nextInt();     
-        
-        
-            while (userchoice>0 && userchoice<7) {
-            Menu.menu();
-            userchoice = input.nextInt();
-            createTable(userchoice);
-            }
+        int userchoice = 0;
 
+        while (!(input.hasNextInt() && input.nextInt() == 1)) {
+            System.out.println("Invalid input! You must type 1!");
+            input.nextLine();
         }
 
+        while (true) {
+            Menu.menu();
+
+            if (input.hasNextInt()) {
+                userchoice = input.nextInt();
+            } else {
+                while (!input.hasNextInt()) {
+                    System.out.println("Invalid input! Enter a number from 1 to 7!");
+                    Menu.menu();
+                    input.nextLine();
+                }
+            }
+
+            if (userchoice < 1 && userchoice > 7) {
+                
+            } else {
+                while (true) {
+                    System.out.println("Invalid input! Enter a number from 1 to 7!");
+                    Menu.menu();
+                    input.nextLine();
+                }
+            }
+
+            createTable(userchoice);
+        }
+
+    }
 
     /**
      * This method creates an ArrayList out of tracks and sorts them according
