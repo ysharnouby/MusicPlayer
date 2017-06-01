@@ -106,7 +106,7 @@ public class Main {
                         pst.setString(1, input);
                         pst.executeUpdate();
                     } catch (SQLException ex) {
-                        Log.debug("Could create playlist", ex);
+                        Log.debug("Could not create playlist", ex);
                     }
                     break;
 
@@ -231,7 +231,7 @@ public class Main {
                     break;
                     
                 case 7:
-                    break;
+                    System.exit(0);
 
             }
         } catch (SQLException ex) {
@@ -279,7 +279,6 @@ public class Main {
                     input.nextLine();
                 }
             }
-
             createTable(userchoice);
         }
 
