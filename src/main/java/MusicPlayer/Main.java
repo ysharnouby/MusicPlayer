@@ -97,23 +97,26 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    System.out.println("Enter playlist name:");
-                    PreparedStatement pst = conn.prepareStatement("INSERT INTO PLAYLISTS (playlist, track, artist, publisher, year) "
-                            + "VALUES (?,?,?,?,?)");
-                    input = sc.nextLine();
-                    Log.info("Playlist created");
+                    PreparedStatement pst = conn.prepareStatement("INSERT INTO PLAYLISTS (playlist) "
+                            + "VALUES (?)");
                     try {
+                        input = "";
+                        while ("".equals(input)) {
+                            System.out.println("Enter playlist name:");
+                            input = sc.nextLine();
+
+                        }
                         pst.setString(1, input);
                         pst.executeUpdate();
+                        Log.info("playlist created");
                     } catch (SQLException ex) {
-                        Log.debug("Could not create playlist", ex);
+                        Log.debug("Failed to create playlist", ex);
                     }
                     break;
 
                 case 2:
                     PreparedStatement pst2 = conn.prepareStatement("INSERT INTO PLAYLISTS (playlist, track, artist, publisher, year) "
                             + "VALUES (?,?,?,?,?)");
-
                     try {
                         input = "";
                         while ("".equals(input)) {
@@ -222,14 +225,11 @@ public class Main {
 
                         }
                         for (int i = 0; i < tracksList.size(); i++) {
-                            if (sorting(tracksList).get(i).track == null) {
-                            } else {
-                                System.out.println(sorting(tracksList).get(i));
-                            }
+                            System.out.println(sorting(tracksList).get(i));
                         }
                     }
                     break;
-                    
+
                 case 7:
                     System.exit(0);
 
